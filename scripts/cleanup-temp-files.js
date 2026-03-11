@@ -24,6 +24,7 @@ const KEEP_FILES = new Set(['CLAUDE.md', 'README.md']);
 // 要归档的模式
 const ARCHIVE_PATTERNS = [
   /.*-plan\.md$/i,
+  /.*_plan\.md$/i,
   /.*-todo\.md$/i,
   /.*\.tmp\.md$/i,
   /.*-task\.md$/i,
@@ -31,10 +32,25 @@ const ARCHIVE_PATTERNS = [
   /^TODO\.md$/i,
   /^TASKS\.md$/i,
   /^notes.*\.md$/i,
+  /progress\.md/,
+  /findings\.md/,
 ];
 
 function shouldArchive(name) {
-  return ARCHIVE_PATTERNS.some(pattern => pattern.test(name));
+  const lowerName = name.toLowerCase();
+
+  for (const pattern of ARCHIVE_PATTERNS) {
+    // 如果是正则表达式，使用 test 方法
+    if (pattern instanceof RegExp) {
+      if (pattern.test(name)) return true;
+    }
+    // 如果是字符串，精确匹配（忽略大小写）
+    else if (typeof pattern === 'string') {
+      if (pattern.toLowerCase() === lowerName) return true;
+    }
+  }
+
+  return false;
 }
 
 function generateArchiveName(name) {
