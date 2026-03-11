@@ -22,10 +22,8 @@ try {
   // 使用 then() 而不是 await，因为这是顶层
   import('node-pty').then((mod) => {
     nodePty = mod;
-    console.log('[PtyManager] node-pty 加载成功');
   }).catch((err: any) => {
     loadError = err.message;
-    console.warn('[PtyManager] node-pty 加载失败，将使用降级模式:', err.message);
   });
 } catch (e: any) {
   loadError = e.message;
@@ -69,8 +67,6 @@ export class PtyManager {
     const id = uuidv4();
     const shell = options.shell || DEFAULT_SHELL;
 
-    console.log(`[PtyManager] 创建会话，shell: ${shell}, platform: ${process.platform}`);
-
     let ptyProcess: any;
 
     if (this.isNodePtyAvailable() && nodePty) {
@@ -84,7 +80,6 @@ export class PtyManager {
       });
     } else {
       // 降级到简单实现
-      console.warn('[PtyManager] 使用降级模式（简单终端）');
       this.usingFallback = true;
       ptyProcess = simplePtyManager.create({
         cols: options.cols || 80,
@@ -117,7 +112,6 @@ export class PtyManager {
   write(sessionId: string, data: string): boolean {
     const session = this.sessions.get(sessionId);
     if (!session) {
-      console.warn(`[PtyManager] 会话不存在：${sessionId}`);
       return false;
     }
 
@@ -132,7 +126,6 @@ export class PtyManager {
   resize(sessionId: string, cols: number, rows: number): boolean {
     const session = this.sessions.get(sessionId);
     if (!session) {
-      console.warn(`[PtyManager] 会话不存在：${sessionId}`);
       return false;
     }
 
@@ -143,7 +136,6 @@ export class PtyManager {
         return true;
       }
     } catch (error: any) {
-      console.error(`[PtyManager] 调整大小失败：${error.message}`);
       return false;
     }
     return false;
@@ -155,7 +147,6 @@ export class PtyManager {
   close(sessionId: string): boolean {
     const session = this.sessions.get(sessionId);
     if (!session) {
-      console.warn(`[PtyManager] 会话不存在：${sessionId}`);
       return false;
     }
 
@@ -163,11 +154,9 @@ export class PtyManager {
       if (session.process.kill) {
         session.process.kill();
         this.sessions.delete(sessionId);
-        console.log(`[PtyManager] 关闭会话 ${sessionId}`);
         return true;
       }
     } catch (error: any) {
-      console.error(`[PtyManager] 关闭会话失败：${error.message}`);
       return false;
     }
     return false;
@@ -177,14 +166,13 @@ export class PtyManager {
    * 关闭所有会话
    */
   closeAll(): void {
-    console.log(`[PtyManager] 关闭所有 ${this.sessions.size} 个会话`);
     for (const [id, session] of this.sessions) {
       try {
         if (session.process.kill) {
           session.process.kill();
         }
       } catch (error: any) {
-        console.error(`[PtyManager] 关闭会话 ${id} 失败：${error.message}`);
+        // 忽略错误
       }
     }
     this.sessions.clear();

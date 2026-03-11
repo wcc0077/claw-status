@@ -27,8 +27,6 @@ export const XtermContainer: React.FC<XtermContainerProps> = ({
   useEffect(() => {
     if (!terminalRef.current) return;
 
-    console.log('[XtermContainer] 开始初始化终端');
-
     const { terminal, fitAddon } = createTerminal(terminalRef.current, {
       fontSize: 14,
       cursorBlink: true,
@@ -38,17 +36,10 @@ export const XtermContainer: React.FC<XtermContainerProps> = ({
 
     // 处理终端输入
     terminal.onData((data) => {
-      console.log('[XtermContainer] 收到输入:', JSON.stringify(data));
-      console.log('[XtermContainer] sessionIdRef.current:', sessionIdRef.current);
       if (sessionIdRef.current) {
-        console.log('[XtermContainer] 发送数据到 WebSocket');
         terminalWS.write(sessionIdRef.current, data);
-      } else {
-        console.error('[XtermContainer] sessionId 为空，无法发送');
       }
     });
-
-    console.log('[XtermContainer] onData 事件已注册');
 
     // 处理终端大小调整
     terminal.onResize(({ cols, rows }) => {
@@ -58,10 +49,8 @@ export const XtermContainer: React.FC<XtermContainerProps> = ({
     });
 
     // 创建后端会话
-    console.log('[XtermContainer] 开始创建后端会话，terminal.cols:', terminal.cols, 'terminal.rows:', terminal.rows);
     terminalWS.create(terminal.cols, terminal.rows)
       .then((newSessionId) => {
-        console.log('[XtermContainer] 会话创建成功，sessionId:', newSessionId);
         sessionIdRef.current = newSessionId;
         onCreated(newSessionId);
 

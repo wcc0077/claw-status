@@ -25,15 +25,12 @@ export class TerminalWebSocketServer {
     });
 
     this.wss.on('connection', (ws) => this.handleConnection(ws));
-    console.log('[TerminalWebSocket] WebSocket 服务器已启动，路径：/ws/terminal');
   }
 
   /**
    * 处理 WebSocket 连接
    */
   private handleConnection(ws: WebSocket): void {
-    console.log('[TerminalWebSocket] 新的终端连接');
-
     ws.on('message', (data: Buffer) => {
       try {
         const message: WSMessage = JSON.parse(data.toString());
@@ -44,7 +41,7 @@ export class TerminalWebSocketServer {
     });
 
     ws.on('close', () => {
-      console.log('[TerminalWebSocket] 连接关闭');
+      this.handleClose(ws, { sessionId: 'unknown' });
     });
 
     ws.on('error', (error) => {
@@ -59,8 +56,6 @@ export class TerminalWebSocketServer {
    * 处理 WebSocket 消息
    */
   private handleMessage(ws: WebSocket, message: WSMessage): void {
-    console.log('[TerminalWebSocket] 收到消息:', message.action, message.sessionId);
-
     switch (message.action) {
       case 'create':
         this.handleCreate(ws, message.payload || {});
@@ -106,15 +101,12 @@ export class TerminalWebSocketServer {
 
       // 绑定退出事件
       session.process.onExit(({ exitCode, signal }: { exitCode?: number; signal?: string }) => {
-        console.log(`[TerminalWebSocket] 会话 ${session.id} 退出，code: ${exitCode}, signal: ${signal}`);
         this.send(ws, {
           type: 'closed',
           sessionId: session.id,
           message: exitCode !== undefined ? `进程退出，退出码：${exitCode}` : '进程已退出',
         });
       });
-
-      console.log(`[TerminalWebSocket] 创建会话 ${session.id}`);
 
       this.send(ws, {
         type: 'created',
@@ -131,15 +123,12 @@ export class TerminalWebSocketServer {
    */
   private handleWrite(ws: WebSocket, message: WSMessage): void {
     if (!message.sessionId || !message.payload?.data) {
-      console.log('[TerminalWebSocket] write 消息缺少参数:', { sessionId: message.sessionId, hasData: !!message.payload?.data });
       this.sendError(ws, '缺少 sessionId 或 data');
       return;
     }
 
-    console.log('[TerminalWebSocket] 写入数据到会话:', message.sessionId, '数据:', message.payload.data);
     const success = ptyManager.write(message.sessionId, message.payload.data);
     if (!success) {
-      console.log('[TerminalWebSocket] 写入失败：会话不存在或已关闭');
       this.sendError(ws, '写入失败', '会话不存在或已关闭');
     }
   }
@@ -214,7 +203,6 @@ export class TerminalWebSocketServer {
    * 关闭服务器
    */
   close(): void {
-    console.log('[TerminalWebSocket] 关闭 WebSocket 服务器');
     ptyManager.closeAll();
     this.wss.close();
   }
