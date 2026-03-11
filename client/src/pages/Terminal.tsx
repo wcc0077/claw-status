@@ -8,7 +8,7 @@ import './Terminal.css';
  */
 const Terminal: React.FC = () => {
   return (
-    <div className="terminal-page">
+    <div className="terminal-page" style={{ minHeight: 0 }}>
       <TerminalTabs />
     </div>
   );

@@ -150,9 +150,10 @@ const MainLayout: React.FC = () => {
             background: '#1e1e1e',
             borderRadius: borderRadiusLG,
             flex: 1,
-            overflow: 'auto',
+            overflow: 'hidden',
             display: 'flex',
             flexDirection: 'column',
+            minHeight: 0,
           }}
         >
           <Outlet />

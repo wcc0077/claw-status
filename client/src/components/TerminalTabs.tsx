@@ -95,11 +95,17 @@ export const TerminalTabs: React.FC = () => {
     if (tab?.sessionId) {
       terminalWS.close(tab.sessionId);
     }
-    setTabs((prev) => prev.filter((t) => t.key !== tabKey));
-    if (activeTab === tabKey) {
-      const remaining = tabs.filter((t) => t.key !== tabKey);
-      setActiveTab(remaining.length > 0 ? remaining[remaining.length - 1].key : null);
-    }
+    // 直接移除 tab，不等待后端响应
+    setTabs((prev) => {
+      const remaining = prev.filter((t) => t.key !== tabKey);
+      // 如果关闭的是当前激活的 tab，切换到最后一个 tab
+      if (activeTab === tabKey && remaining.length > 0) {
+        setActiveTab(remaining[remaining.length - 1].key);
+      } else if (remaining.length === 0) {
+        setActiveTab(null);
+      }
+      return remaining;
+    });
   };
 
   // 渲染标签页 - 只渲染标签栏，不渲染内容
