@@ -4,10 +4,16 @@ import { readFileSync, writeFileSync, readdirSync, statSync, existsSync, lstatSy
 import path from 'path';
 import { fileURLToPath } from 'url';
 import 'dotenv/config';
+import { createServer } from 'http';
+import { TerminalWebSocketServer } from './terminal/websocket.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
+const server = createServer(app);
 const PORT = process.env.DASHBOARD_PORT || 3000;
+
+// 初始化终端 WebSocket 服务器
+const terminalWs = new TerminalWebSocketServer(server);
 
 // 本地文件根目录
 const FILE_ROOT = process.env.FILE_ROOT || path.join(process.cwd());
@@ -401,10 +407,11 @@ if (!isDev) {
 }
 
 // ============ 启动服务器 ============
-const server = app.listen(PORT, '0.0.0.0', () => {
+server.listen(Number(PORT), '0.0.0.0', () => {
   console.log(`\n🦞 OpenClaw Dashboard 运行在 http://0.0.0.0:${PORT}`);
   console.log(`📁 文件根目录：${FILE_ROOT}`);
   console.log(`🔧 模式：${isDev ? '开发 (Vite HMR)' : '生产'}\n`);
+  console.log(`📡 终端 WebSocket: ws://0.0.0.0:${PORT}/ws/terminal\n`);
 });
 
 // 优雅关闭

@@ -1,0 +1,133 @@
+/* VSCode 暗黑主题风格 */
+.terminal-tabs-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: #1e1e1e;
+}
+
+.terminal-tab-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  background: #252526;
+  border-bottom: 1px solid #3c3c3c;
+  height: 35px;
+  flex-shrink: 0;
+}
+
+.terminal-tab-bar .ant-tabs {
+  flex: 1;
+  margin: 0;
+  min-width: 0;
+  background: #1e1e1e;
+}
+
+.terminal-tab-bar .ant-tabs-nav {
+  margin: 0;
+  padding: 0 8px;
+  border: none;
+  background: #1e1e1e;
+}
+
+.terminal-tab-bar .ant-tabs-nav .ant-tabs-tab {
+  background: #1e1e1e !important;
+}
+
+.terminal-tab-bar .ant-tabs-nav::before {
+  border: none;
+}
+
+.terminal-tab-bar .ant-tabs-tab {
+  background: #1e1e1e;
+  border: none !important;
+  margin: 0 2px;
+  color: #969696;
+  padding: 6px 16px;
+  border-radius: 4px 4px 0 0;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.terminal-tab-bar .ant-tabs-tab:hover {
+  background: #2d2d2d;
+  color: #cccccc;
+}
+
+.terminal-tab-bar .ant-tabs-tab-active {
+  background: #2d2d2d;
+  color: #ffffff;
+  border-top: 2px solid #0e639c !important;
+}
+
+.terminal-tab-bar .ant-tabs-tab .ant-tabs-tab-remove {
+  color: #969696;
+  margin-left: 8px;
+}
+
+.terminal-tab-bar .ant-tabs-tab .ant-tabs-tab-remove:hover {
+  color: #ffffff;
+}
+
+.terminal-tab-bar .ant-tabs-ink-bar {
+  display: none;
+}
+
+.terminal-tab-bar .ant-tabs-content-holder {
+  display: none;
+}
+
+/* 新建终端按钮 */
+.terminal-tab-bar .ant-btn-primary {
+  background: #0e639c;
+  border: none;
+  color: #ffffff;
+  height: 28px;
+  margin-right: 8px;
+}
+
+.terminal-tab-bar .ant-btn-primary:hover {
+  background: #1177bb;
+}
+
+.terminal-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background: #1e1e1e;
+}
+
+.terminal-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.terminal-panel.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.terminal-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 16px;
+}
+
+.terminal-connecting {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #666;
+  font-size: 14px;
+}
