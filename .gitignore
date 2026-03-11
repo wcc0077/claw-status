@@ -1,0 +1,10 @@
+node_modules
+dist
+dist-server
+*.log
+.DS_Store
+.env
+.env.local
+
+# 归档目录（可选：如果希望归档文件被 Git 跟踪，请删除此行）
+# .archive/

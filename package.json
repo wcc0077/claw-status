@@ -1,0 +1,45 @@
+{
+  "name": "openclaw-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "OpenClaw Web Dashboard - 运行在 OpenClaw 实例机器上",
+  "type": "module",
+  "scripts": {
+    "dev": "run-p dev:server dev:client",
+    "dev:server": "tsx watch src-server/index.ts",
+    "dev:client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "start": "node dist-server/index.js",
+    "preview": "npm run build && npm start",
+    "dev:remote": "tsx tests/remote-dev.ts",
+    "config:remote": "node tests/config-remote.js",
+    "test": "tsx tests/run-all.ts",
+    "test:server": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:client": "cd client && npm run test",
+    "test:e2e": "tsx tests/integration-runner.ts",
+    "archive": "node scripts/cleanup-temp-files.js",
+    "archive:check": "node scripts/cleanup-temp-files.js --check"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.0",
+    "@types/supertest": "^6.0.2",
+    "@types/ws": "^8.5.10",
+    "@vitest/coverage-v8": "^1.2.0",
+    "axios": "^1.6.5",
+    "npm-run-all": "^4.1.5",
+    "supertest": "^6.3.4",
+    "tsx": "^4.7.0",
+    "vitest": "^1.2.0"
+  }
+}
