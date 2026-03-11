@@ -2,7 +2,14 @@
 
 import React, { useState } from 'react';
 import { Layout, Menu, theme } from 'antd';
-import { DashboardOutlined, FolderOutlined } from '@ant-design/icons';
+import {
+  DashboardOutlined,
+  FolderOutlined,
+  MessageOutlined,
+  DatabaseOutlined,
+  ClockCircleOutlined,
+  RobotOutlined,
+} from '@ant-design/icons';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;
@@ -15,6 +22,26 @@ const menuItems = [
     key: '/',
     icon: <DashboardOutlined />,
     label: 'Dashboard',
+  },
+  {
+    key: '/sessions',
+    icon: <MessageOutlined />,
+    label: 'Sessions',
+  },
+  {
+    key: '/memory',
+    icon: <DatabaseOutlined />,
+    label: 'Memory',
+  },
+  {
+    key: '/cron',
+    icon: <ClockCircleOutlined />,
+    label: 'Cron',
+  },
+  {
+    key: '/subagents',
+    icon: <RobotOutlined />,
+    label: 'SubAgents',
   },
   {
     key: '/files',

@@ -10,6 +10,17 @@ import type {
   FileRenameResponse,
   FileMoveResponse,
   ConfigPathResponse,
+  SessionsListResponse,
+  SessionDetailResponse,
+  SessionsStatsResponse,
+  MemoryStatusResponse,
+  MemoryFilesResponse,
+  MemoryContentResponse,
+  CronListResponse,
+  CronRunsResponse,
+  SubAgentsResponse,
+  HeartbeatConfigResponse,
+  TodosResponse,
 } from '@/types/api';
 
 // API 基础 URL - 开发环境代理到本地服务器
@@ -88,6 +99,77 @@ export const filesApi = {
 };
 
 /**
+ * 会话管理 API
+ */
+export const sessionsApi = {
+  /** 获取会话列表 */
+  list: (): Promise<SessionsListResponse> =>
+    requestDirect('/api/sessions'),
+
+  /** 获取会话详情 */
+  getDetail: (id: string): Promise<SessionDetailResponse> =>
+    requestDirect(`/api/sessions/${encodeURIComponent(id)}`),
+
+  /** 获取会话统计 */
+  getStats: (): Promise<SessionsStatsResponse> =>
+    requestDirect('/api/sessions/stats'),
+};
+
+/**
+ * 记忆系统 API
+ */
+export const memoryApi = {
+  /** 获取记忆状态 */
+  getStatus: (): Promise<MemoryStatusResponse> =>
+    requestDirect('/api/memory/status'),
+
+  /** 获取记忆文件列表 */
+  getFiles: (): Promise<MemoryFilesResponse> =>
+    requestDirect('/api/memory/files'),
+
+  /** 获取记忆内容 */
+  getContent: (path: string): Promise<MemoryContentResponse> =>
+    requestDirect(`/api/memory/content/${encodeURIComponent(path)}`),
+};
+
+/**
+ * 定时任务 API
+ */
+export const cronApi = {
+  /** 获取定时任务列表 */
+  list: (): Promise<CronListResponse> =>
+    requestDirect('/api/cron'),
+
+  /** 获取运行历史 */
+  getRuns: (jobId: string): Promise<CronRunsResponse> =>
+    requestDirect(`/api/cron/${encodeURIComponent(jobId)}/runs`),
+};
+
+/**
+ * 子代理 API
+ */
+export const subagentsApi = {
+  /** 获取子代理状态 */
+  getStatus: (): Promise<SubAgentsResponse> =>
+    requestDirect('/api/subagents'),
+};
+
+/**
+ * Heartbeat & Todos API
+ */
+export const heartbeatApi = {
+  /** 获取 HEARTBEAT.md 内容 */
+  getConfig: (): Promise<HeartbeatConfigResponse> =>
+    requestDirect('/api/heartbeat/config'),
+};
+
+export const todosApi = {
+  /** 获取今日待办 */
+  getToday: (): Promise<TodosResponse> =>
+    requestDirect('/api/todos/today'),
+};
+
+/**
  * 配置 API
  */
 export const configApi = {
@@ -98,6 +180,12 @@ export const configApi = {
 // 导出所有 API 模块
 export const api = {
   files: filesApi,
+  sessions: sessionsApi,
+  memory: memoryApi,
+  cron: cronApi,
+  subagents: subagentsApi,
+  heartbeat: heartbeatApi,
+  todos: todosApi,
   config: configApi,
 };
 
